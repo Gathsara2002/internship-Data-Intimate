@@ -1,16 +1,13 @@
 var express = require('express');
 var router = express.Router();
-
-router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
-});
+const products = require('../controller/productController');
 
 /* GET all products. */
-/*router.get('/', products.getAllProducts);
+router.get('/', products.getAllProducts);
 
 router.post('/save', products.saveProduct);
 
-router.get('/find/:id', products.searchProduct);
+/*router.get('/find/:id', products.searchProduct);
 
 router.delete('/delete/:id', products.deleteProduct);
 
