@@ -50,7 +50,7 @@ const ProductsController = {
         try {
 
             const id = req.params.id;
-            const query = "SELECT * FROM Products WHERE id=?";
+            const query = "SELECT * FROM Products WHERE id= ? ";
             const product = db.query(query, [id], (err, result, fields) => {
                 if (err) {
                     console.log("Error - " + err);
@@ -82,14 +82,6 @@ const ProductsController = {
                 }
             });
 
-            if (product.deletedCount === 0) {
-                return res.status(404).json({
-                    error: "Product not found !"
-                });
-            }
-
-            res.status(200).json(product);
-
         } catch (error) {
             res.status(500).json({
                 error: "Something went wrong ! " + error
@@ -113,14 +105,6 @@ const ProductsController = {
                     res.status(200).json(result);
                 }
             });
-
-            if (!updatedProduct) {
-                return res.status(404).json({
-                    error: "Product not found !"
-                });
-            }
-
-            res.status(200).json(updatedProduct);
 
         } catch (error) {
             res.status(500).json({
