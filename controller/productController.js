@@ -32,7 +32,6 @@ const ProductsController = {
             const product = db.query(query, [values], (err, result, fields) => {
                 if (err) {
                     console.log("Error - " + err);
-                    console.log(query,values)
                 } else {
                     console.log(result);
                     res.status(200).json(result);
@@ -46,13 +45,20 @@ const ProductsController = {
         }
     },
 
-    searchProduct: async function (req, res, next) {
+    searchProduct: function (req, res, next) {
 
         try {
 
             const id = req.params.id;
-            const product = await model.find({id: id});
-            res.status(200).json(product);
+            const query = "SELECT * FROM Products WHERE id=?";
+            const product = db.query(query, [id], (err, result, fields) => {
+                if (err) {
+                    console.log("Error - " + err);
+                } else {
+                    console.log(result);
+                    res.status(200).json(result);
+                }
+            });
 
         } catch (error) {
             res.status(500).json({
@@ -61,12 +67,20 @@ const ProductsController = {
         }
     },
 
-    deleteProduct: async function (req, res, next) {
+    deleteProduct: function (req, res, next) {
 
         try {
 
             const id = req.params.id;
-            const product = await model.deleteOne({id: id});
+            const query = "DELETE FROM Products WHERE id=?"
+            const product = db.query(query, [id], (err, result, fields) => {
+                if (err) {
+                    console.log("Error - " + err);
+                } else {
+                    console.log(result);
+                    res.status(200).json(result);
+                }
+            });
 
             if (product.deletedCount === 0) {
                 return res.status(404).json({
@@ -90,11 +104,15 @@ const ProductsController = {
             const id = req.params.id;
             const body = req.body;
 
-            const updatedProduct = await model.findOneAndUpdate({
-                    id: id,
-                }, body,
-                {new: true}
-            );
+            const query = "UPDATE Products set name=?,price=? WHERE id=?";
+            const updatedProduct = db.query(query, [body.name, body.price, id], (err, result, fields) => {
+                if (err) {
+                    console.log("Error - " + err);
+                } else {
+                    console.log(result);
+                    res.status(200).json(result);
+                }
+            });
 
             if (!updatedProduct) {
                 return res.status(404).json({
